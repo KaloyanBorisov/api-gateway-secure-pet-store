@@ -1,0 +1,9 @@
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 300
+      MemorySize: 512
+      Handler: com.amazonaws.apigatewaydemo.RequestRouter::lambdaHandler
+      CodeUri: D:\AWS\api-gateway-secure-pet-store
+      Runtime: java11

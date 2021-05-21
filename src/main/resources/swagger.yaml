@@ -6,12 +6,12 @@ info:
   description: Pet store sample that uses Cognito Developer Authenticated Identities to generate credentials through a Java Lambda Function
   version: "1.0.0"
 # the domain of the service
-host: execute-api.us-east-1.amazonaws.com
+host: execute-api.us-east-2.amazonaws.com
 # array of all schemes that your API supports
 schemes:
   - https
 # will be prefixed to all paths
-basePath: /
+basePath: /dev
 produces:
   - application/json
 paths:
@@ -35,8 +35,8 @@ paths:
         - Auth
       x-amazon-apigateway-integration:
         type: aws
-        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:XXXXXXXXXXXX:function:YOUR_FUNCTION_NAME/invocations
-        credentials: arn:aws:iam::XXXXXXXXXXXX:role/YOUR_LAMBDA_INVOCATION_ROLE
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:609650514279:function:api-gateway-secure-pet-store/invocations
+        credentials: arn:aws:iam::609650514279:role/API_Gateway_Cognito_Role
         httpMethod: POST
         requestTemplates:
           application/json: |
@@ -136,8 +136,8 @@ paths:
         - Auth
       x-amazon-apigateway-integration:
         type: aws
-        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:XXXXXXXXXXXX:function:YOUR_FUNCTION_NAME/invocations
-        credentials: arn:aws:iam::XXXXXXXXXXXX:role/YOUR_LAMBDA_INVOCATION_ROLE
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:609650514279:function:api-gateway-secure-pet-store/invocations
+        credentials: arn:aws:iam::609650514279:role/API_Gateway_Cognito_Role
         httpMethod: POST
         requestTemplates:
           application/json: |
@@ -238,7 +238,7 @@ paths:
         - Pet Store
       x-amazon-apigateway-integration:
         type: aws
-        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:XXXXXXXXXXXX:function:YOUR_FUNCTION_NAME/invocations
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:609650514279:function:api-gateway-secure-pet-store/invocations
         credentials: arn:aws:iam::*:user/*
         httpMethod: POST
         requestTemplates:
@@ -295,7 +295,7 @@ paths:
         - Pet Store
       x-amazon-apigateway-integration:
         type: aws
-        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:XXXXXXXXXXXX:function:YOUR_FUNCTION_NAME/invocations
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:609650514279:function:api-gateway-secure-pet-store/invocations
         credentials: arn:aws:iam::*:user/*
         httpMethod: POST
         requestTemplates:
@@ -395,7 +395,7 @@ paths:
           type: string
       x-amazon-apigateway-integration:
         type: aws
-        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:XXXXXXXXXXXX:function:YOUR_FUNCTION_NAME/invocations
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:609650514279:function:api-gateway-secure-pet-store/invocations
         credentials: arn:aws:iam::*:user/*
         httpMethod: POST
         requestTemplates:
@@ -571,7 +571,7 @@ definitions:
   Pets:
     type: array
     items:
-      $ref: Pet
+      $ref: '#/definitions/Pet'
   Error:
     properties:
       code:

@@ -126,7 +126,7 @@ arn:aws:apigateway:<YOUR REGION>:lambda:path/2015-03-31/functions/<YOUR LAMBDA F
                 "lambda:InvokeFunction"
             ],
             "Resource": [
-                "<LAMBDA_ARN>"
+                "arn:aws:lambda:us-east-2:609650514279:function:api-gateway-secure-pet-store"
             ]
         }
     ]

@@ -1,0 +1,82 @@
+curl -X 'POST' 'https://fucfcmqy3i.execute-api.us-east-2.amazonaws.com/dev/users' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{ "username": "koko", "password":"bok0" }'
+
+
+
+{
+  "action" : "com.amazonaws.apigatewaydemo.action.RegisterDemoAction",
+  "body" : {"username":"ddddd","password":"vvfhvvvvv"}
+}
+
+
+{
+  "username": "ddddd",
+  "password": "vvfhvvvvv"
+}
+
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:PutItem",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "cognito-identity:GetOpenIdTokenForDeveloperIdentity",
+                "dynamodb:UpdateItem"
+            ],
+            "Resource": [
+                ,
+
+            ]
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": "logs:*",
+            "Resource": "*"
+        }
+    ]
+}
+
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "cognito-identity:GetOpenIdTokenForDeveloperIdentity"
+            ],
+            "Resource": [
+                "arn:aws:cognito-identity:us-east-2:609650514279:identitypool/us-east-2:4811cb78-b1d4-483b-93c7-d28775283743"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:PutItem",
+                "dynamodb:Scan",
+                "dynamodb:UpdateItem"
+            ],
+            "Resource": [
+                "arn:aws:dynamodb:us-east-2:609650514279:table/com.amazonaws.apigatewaydemo.model.pet.Pet",
+                "arn:aws:dynamodb:us-east-2:609650514279:table/com.amazonaws.apigatewaydemo.model.user.User"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:*"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+    ]
+}
+
+sam local invoke -t build\template.yaml -e event.json

@@ -1,0 +1,4 @@
+{
+  "action" : "com.amazonaws.apigatewaydemo.action.RegisterDemoAction",
+  "body" : {"username":"dqdo","password":"vvfhvvvvv"}
+}

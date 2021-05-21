@@ -15,10 +15,6 @@ package com.amazonaws.apigatewaydemo.model.pet;
 import com.amazonaws.apigatewaydemo.configuration.DynamoDBConfiguration;
 import com.amazonaws.apigatewaydemo.exception.DAOException;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
-
 import java.util.List;
 
 /**
@@ -35,7 +31,7 @@ public class DDBPetDAO implements PetDAO {
 
     // credentials for the client come from the environment variables pre-configured by Lambda. These are tied to the
     // Lambda function execution role.
-    private static AmazonDynamoDBClient ddbClient = new AmazonDynamoDBClient();
+//    private static AmazonDynamoDBClient ddbClient = new AmazonDynamoDBClient();
 
     /**
      * Returns the initialized default instance of the PetDAO
@@ -66,7 +62,7 @@ public class DDBPetDAO implements PetDAO {
             throw new DAOException("Cannot lookup null or empty pet");
         }
 
-        getMapper().save(pet);
+     //   getMapper().save(pet);
 
         return pet.getPetId();
     }
@@ -83,7 +79,8 @@ public class DDBPetDAO implements PetDAO {
             throw new DAOException("Cannot lookup null or empty petId");
         }
 
-        return getMapper().load(Pet.class, petId);
+       // return getMapper().load(Pet.class, petId);
+        return null;
     }
 
     /**
@@ -96,17 +93,9 @@ public class DDBPetDAO implements PetDAO {
         if (limit <= 0 || limit > DynamoDBConfiguration.SCAN_LIMIT)
             limit = DynamoDBConfiguration.SCAN_LIMIT;
 
-        DynamoDBScanExpression expression = new DynamoDBScanExpression();
-        expression.setLimit(limit);
-        return getMapper().scan(Pet.class, expression);
-    }
-
-    /**
-     * Returns a DynamoDBMapper object initialized with the default DynamoDB client
-     *
-     * @return An initialized DynamoDBMapper
-     */
-    protected DynamoDBMapper getMapper() {
-        return new DynamoDBMapper(ddbClient);
+    //    DynamoDBScanExpression expression = new DynamoDBScanExpression();
+    //    expression.setLimit(limit);
+     //   return getMapper().scan(Pet.class, expression);
+        return null;
     }
 }

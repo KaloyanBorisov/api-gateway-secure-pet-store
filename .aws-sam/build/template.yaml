@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Globals:
+  Function:
+    Timeout: 20
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: java11
+      MemorySize: 512
+      PackageType: Image
+      ImageUri: function:java11-maven-v1
+    Metadata:
+      DockerTag: java11-maven-v1
+      DockerContext: .
+      Dockerfile: Dockerfile

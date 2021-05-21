@@ -12,15 +12,18 @@
  */
 package com.amazonaws.apigatewaydemo.model.user;
 
-import com.amazonaws.apigatewaydemo.configuration.DynamoDBConfiguration;
-import com.amazonaws.services.dynamodbv2.datamodeling.*;
+//import com.amazonaws.apigatewaydemo.configuration.DynamoDBConfiguration;
+//import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
 
 import java.nio.ByteBuffer;
 
 /**
  * User object model - this class is annotated to be used with the DynamoDB object mapper
  */
-@DynamoDBTable(tableName = DynamoDBConfiguration.USERS_TABLE_NAME)
+@DynamoDbBean //(tableName = DynamoDBConfiguration.USERS_TABLE_NAME)
 public class User {
     private String username;
     private ByteBuffer password;
@@ -31,7 +34,7 @@ public class User {
 
     }
 
-    @DynamoDBHashKey(attributeName = "username")
+    @DynamoDbPartitionKey
     public String getUsername() {
         return username;
     }
@@ -40,7 +43,7 @@ public class User {
         this.username = username;
     }
 
-    @DynamoDBAttribute(attributeName = "password")
+    @DynamoDbSortKey //(attributeName = "password")
     public ByteBuffer getPassword() {
         return password;
     }
@@ -49,7 +52,7 @@ public class User {
         this.password = password;
     }
 
-    @DynamoDBAttribute(attributeName = "passwordSalt")
+   // @DynamoDBAttribute(attributeName = "passwordSalt")
     public ByteBuffer getSalt() {
         return salt;
     }
@@ -58,7 +61,7 @@ public class User {
         this.salt = salt;
     }
 
-    @DynamoDBAttribute(attributeName = "identityId")
+    //@DynamoDBAttribute(attributeName = "identityId")
     public String getCognitoIdentityId() {
         if (this.identity == null) {
             return null;
@@ -73,17 +76,17 @@ public class User {
         this.identity.setIdentityId(cognitoIdentityId);
     }
 
-    @DynamoDBIgnore
+   // @DynamoDBIgnore
     public byte[] getPasswordBytes() {
         return password.array();
     }
 
-    @DynamoDBIgnore
+   // @DynamoDBIgnore
     public byte[] getSaltBytes() {
         return salt.array();
     }
 
-    @DynamoDBIgnore
+    //@DynamoDBIgnore
     public UserIdentity getIdentity() {
         return identity;
     }

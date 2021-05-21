@@ -12,10 +12,17 @@
  */
 package com.amazonaws.apigatewaydemo.model.user;
 
+import software.amazon.awssdk.regions.Region;
+import com.amazonaws.apigatewaydemo.configuration.DynamoDBConfiguration;
 import com.amazonaws.apigatewaydemo.exception.DAOException;
+import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
+import software.amazon.awssdk.enhanced.dynamodb.Key;
+import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import java.util.HashMap;
 
 /**
  * DynamoDB implementation of the UserDAO interface. This class reads the configuration from the DyanmoDBConfiguration
@@ -25,11 +32,10 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
  * The table in DynamoDB should be created with an Hash Key called username.
  */
 public class DDBUserDAO implements UserDAO {
-    private static DDBUserDAO instance = null;
 
-    // credentials for the client come from the environment variables pre-configured by Lambda. These are tied to the
-    // Lambda function execution role.
-    private static AmazonDynamoDBClient ddbClient = new AmazonDynamoDBClient();
+    private static DDBUserDAO instance = null;
+    private DynamoDbEnhancedClient enhancedClient;
+    private DynamoDbTable<User> table;
 
     /**
      * Returns an initialized instance of the DDBUserDAO object. DAO objects should be retrieved through the DAOFactory
@@ -41,12 +47,23 @@ public class DDBUserDAO implements UserDAO {
         if (instance == null) {
             instance = new DDBUserDAO();
         }
-
         return instance;
     }
 
     protected DDBUserDAO() {
-        // prevents instantiation
+
+        Region region = Region.US_EAST_2;
+        DynamoDbClient ddb = DynamoDbClient.builder()
+                .region(region)
+                .credentialsProvider(EnvironmentVariableCredentialsProvider.create())
+                .build();
+
+        DynamoDbEnhancedClient enhancedClient = DynamoDbEnhancedClient.builder()
+                .dynamoDbClient(ddb)
+                .build();
+
+        // Map Table Using Bean
+        table = enhancedClient.table(DynamoDBConfiguration.USERS_TABLE_NAME, TableSchema.fromBean(User.class));
     }
 
     /**
@@ -60,8 +77,11 @@ public class DDBUserDAO implements UserDAO {
         if (username == null || username.trim().equals("")) {
             throw new DAOException("Cannot lookup null or empty user");
         }
-
-        return getMapper().load(User.class, username);
+        Key key = Key.builder()
+                .partitionValue(username)
+                .build();
+        // Get Item
+        return table.getItem(r -> r.key(key));
     }
 
     /**
@@ -75,22 +95,11 @@ public class DDBUserDAO implements UserDAO {
         if (user.getUsername() == null || user.getUsername().trim().equals("")) {
             throw new DAOException("Cannot create user with empty username");
         }
-
         if (getUserByName(user.getUsername()) != null) {
             throw new DAOException("Username must be unique");
         }
-
-        getMapper().save(user);
-
+        // Add Item
+        table.putItem(user);
         return user.getUsername();
-    }
-
-    /**
-     * Returns a DynamoDBMapper object initialized with the default DynamoDB client
-     *
-     * @return An initialized DynamoDBMapper
-     */
-    protected DynamoDBMapper getMapper() {
-        return new DynamoDBMapper(ddbClient);
     }
 }
